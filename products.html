@@ -21,6 +21,11 @@
 
 <section class="products">
     <h2>Our Watch Collection</h2>
+    <section class="cart-section" aria-label="Shopping cart">
+        <h3>Your Cart</h3>
+        <ul id="cartItems"></ul>
+        <p class="cart-total">Total: <span id="cartTotal">Rs 0</span></p>
+    </section>
 
     <div class="product-group">
         <h3>Men's Collection</h3>
@@ -30,6 +35,7 @@
                 <span class="product-tag">Men</span>
                 <h4>Regal Leather Chronograph</h4>
                 <p>Rs 7,999</p>
+                <button class="buy-btn" type="button">Buy</button>
             </div>
 
             <div class="product-card">
@@ -37,6 +43,7 @@
                 <span class="product-tag">Men</span>
                 <h4>Titan Steel Automatic</h4>
                 <p>Rs 10,499</p>
+                <button class="buy-btn" type="button">Buy</button>
             </div>
 
             <div class="product-card">
@@ -44,6 +51,7 @@
                 <span class="product-tag">Men</span>
                 <h4>Midnight Sport Pro</h4>
                 <p>Rs 6,899</p>
+                <button class="buy-btn" type="button">Buy</button>
             </div>
 
             <div class="product-card">
@@ -51,6 +59,7 @@
                 <span class="product-tag">Men</span>
                 <h4>Prestige Moonphase</h4>
                 <p>Rs 12,299</p>
+                <button class="buy-btn" type="button">Buy</button>
             </div>
 
             <div class="product-card">
@@ -58,6 +67,7 @@
                 <span class="product-tag">Men</span>
                 <h4>Executive Black Dial</h4>
                 <p>Rs 8,499</p>
+                <button class="buy-btn" type="button">Buy</button>
             </div>
 
             <div class="product-card">
@@ -65,6 +75,7 @@
                 <span class="product-tag">Men</span>
                 <h4>Urban Field Master</h4>
                 <p>Rs 7,299</p>
+                <button class="buy-btn" type="button">Buy</button>
             </div>
         </div>
     </div>
@@ -77,6 +88,7 @@
                 <span class="product-tag">Women</span>
                 <h4>Rose Gold Elegance</h4>
                 <p>Rs 8,299</p>
+                <button class="buy-btn" type="button">Buy</button>
             </div>
 
             <div class="product-card">
@@ -84,6 +96,7 @@
                 <span class="product-tag">Women</span>
                 <h4>Pearl Luxe Bracelet Watch</h4>
                 <p>Rs 9,199</p>
+                <button class="buy-btn" type="button">Buy</button>
             </div>
 
             <div class="product-card">
@@ -91,6 +104,7 @@
                 <span class="product-tag">Women</span>
                 <h4>Aurora Slim Classic</h4>
                 <p>Rs 5,999</p>
+                <button class="buy-btn" type="button">Buy</button>
             </div>
 
             <div class="product-card">
@@ -98,6 +112,7 @@
                 <span class="product-tag">Women</span>
                 <h4>Diamond Mist Edition</h4>
                 <p>Rs 11,499</p>
+                <button class="buy-btn" type="button">Buy</button>
             </div>
 
             <div class="product-card">
@@ -105,6 +120,7 @@
                 <span class="product-tag">Women</span>
                 <h4>Velvet Silver Charm</h4>
                 <p>Rs 7,799</p>
+                <button class="buy-btn" type="button">Buy</button>
             </div>
 
             <div class="product-card">
@@ -112,6 +128,7 @@
                 <span class="product-tag">Women</span>
                 <h4>Luna Petite Shine</h4>
                 <p>Rs 6,699</p>
+                <button class="buy-btn" type="button">Buy</button>
             </div>
         </div>
     </div>
@@ -120,6 +137,61 @@
 <footer>
     <p>&copy; 2026 TimeZone Watch Store</p>
 </footer>
+
+<script>
+    const cartItemsEl = document.getElementById("cartItems");
+    const cartTotalEl = document.getElementById("cartTotal");
+    const cart = {};
+
+    function formatRupees(amount) {
+        return "Rs " + amount.toLocaleString("en-IN");
+    }
+
+    function getPriceFromText(text) {
+        return Number(text.replace(/[^\d]/g, ""));
+    }
+
+    function renderCart() {
+        cartItemsEl.innerHTML = "";
+        let total = 0;
+        const names = Object.keys(cart);
+
+        if (names.length === 0) {
+            cartItemsEl.innerHTML = "<li class='empty-cart'>Your cart is empty.</li>";
+            cartTotalEl.textContent = formatRupees(0);
+            return;
+        }
+
+        names.forEach((name) => {
+            const item = cart[name];
+            total += item.price * item.qty;
+
+            const li = document.createElement("li");
+            li.textContent = name + " x" + item.qty + " - " + formatRupees(item.price * item.qty);
+            cartItemsEl.appendChild(li);
+        });
+
+        cartTotalEl.textContent = formatRupees(total);
+    }
+
+    document.querySelectorAll(".buy-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const card = btn.closest(".product-card");
+            const name = card.querySelector("h4").textContent.trim();
+            const priceText = card.querySelector("p").textContent.trim();
+            const price = getPriceFromText(priceText);
+
+            if (!cart[name]) {
+                cart[name] = { price, qty: 0 };
+            }
+
+            cart[name].qty += 1;
+            renderCart();
+        });
+    });
+
+    renderCart();
+</script>
 
 </body>
 </html>
