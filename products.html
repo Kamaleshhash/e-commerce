@@ -138,60 +138,7 @@
     <p>&copy; 2026 TimeZone Watch Store</p>
 </footer>
 
-<script>
-    const cartItemsEl = document.getElementById("cartItems");
-    const cartTotalEl = document.getElementById("cartTotal");
-    const cart = {};
 
-    function formatRupees(amount) {
-        return "Rs " + amount.toLocaleString("en-IN");
-    }
-
-    function getPriceFromText(text) {
-        return Number(text.replace(/[^\d]/g, ""));
-    }
-
-    function renderCart() {
-        cartItemsEl.innerHTML = "";
-        let total = 0;
-        const names = Object.keys(cart);
-
-        if (names.length === 0) {
-            cartItemsEl.innerHTML = "<li class='empty-cart'>Your cart is empty.</li>";
-            cartTotalEl.textContent = formatRupees(0);
-            return;
-        }
-
-        names.forEach((name) => {
-            const item = cart[name];
-            total += item.price * item.qty;
-
-            const li = document.createElement("li");
-            li.textContent = name + " x" + item.qty + " - " + formatRupees(item.price * item.qty);
-            cartItemsEl.appendChild(li);
-        });
-
-        cartTotalEl.textContent = formatRupees(total);
-    }
-
-    document.querySelectorAll(".buy-btn").forEach((btn) => {
-        btn.addEventListener("click", () => {
-            const card = btn.closest(".product-card");
-            const name = card.querySelector("h4").textContent.trim();
-            const priceText = card.querySelector("p").textContent.trim();
-            const price = getPriceFromText(priceText);
-
-            if (!cart[name]) {
-                cart[name] = { price, qty: 0 };
-            }
-
-            cart[name].qty += 1;
-            renderCart();
-        });
-    });
-
-    renderCart();
-</script>
 
 </body>
 </html>
